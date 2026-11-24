@@ -222,19 +222,15 @@ def second_pass(instructions):
 # ---------- SAVE SYMBOLS ----------
 
 def save_symbols(user_symbols, output_file):
+    predefined = {"SP", "LCL", "ARG", "THIS", "THAT", "SCREEN", "KBD"}
+    predefined |= {"R" + str(i) for i in range(16)}
 
     with open(output_file, "w") as file:
-
         for name, address in user_symbols.items():
             file.write(f"{name} = {address}\n")
-
         for name, address in symbol_table.items():
-            if name not in user_symbols and name not in {
-                "SP", "LCL", "ARG", "THIS", "THAT",
-                "SCREEN", "KBD"
-            } and not name.startswith("R"):
+            if name not in user_symbols and name not in predefined:
                 file.write(f"{name} = {address}\n")
-
 
 # ---------- MAIN ASSEMBLER ----------
 
